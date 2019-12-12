@@ -1,28 +1,31 @@
 <?php
 
-  //	Démarre le système de sessions. Si le visiteur vient d'arriver sur le site, alors un numéro de session est généré pour lui.
+
+
+
   session_start();
+  include('db_connect.php');
+
+
 
 
   if(!isset($_SESSION['session_username']))
   {
-    //  Envoie vers la page de profil si un utilisateur est identifié
-    header('location:page_user.php');
+    header('location:login.php');
   }
 
 
-  //  __Connection à la base de données__
-  include('db_connect.php');
 
 
-  //  Insertion d'un nouveau message
   if(isset($_POST['message_input']))
   {
     $req = $bdd->prepare('INSERT INTO messages_table(sender, message, posting_date_time) VALUES(:message_sender, :message_content, NOW())');
+
     $req->execute(array(
         'message_sender' => $_SESSION['session_username'],
       	'message_content' => htmlspecialchars($_POST['message_input'])
     	));
+
     $req->closeCursor();
   }
 
@@ -45,13 +48,11 @@
 
     <body>
       <div class="container">
-        <!--DEBUT DU CHAT--->
         <div class="row">
           <div class="col-12 msg_history_display">
-              <!--
-              -->
               <div class="msg_history">
                 <?php
+
                   $reponse = $bdd->query('SELECT sender, message, DATE(posting_date_time) AS posting_day, HOUR(posting_date_time) AS posting_hour, MINUTE(posting_date_time) AS posting_minute FROM messages_table ORDER BY ID');
 
                   while ($donnees = $reponse->fetch())
@@ -68,7 +69,6 @@
                     else
                     {
                       echo '<div class="incoming_msg">
-                              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                               <div class="received_msg">
                                 <div class="received_withd_msg">
                                   <p style="overflow-wrap: break-word;">'.$donnees['message'].'</p>
@@ -81,11 +81,9 @@
                   $reponse->closeCursor();
                 ?>
               </div>
-              <!--
-              -->
           </div>
         </div>
-          <form class="row" method="post" action="page_chatbox.php">
+          <form class="row" method="post" action="chatbox.php">
             <div class="col-10 send_msg_input_column">
               <textarea class="text_area send_msg_input" placeholder="Type a message" name="message_input" required></textarea>
             </div>
@@ -94,11 +92,8 @@
               <button class="send_msg_button" type="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
             </div>
           </form>
-        <!--FIN DU CHAT--->
       </div>
 
-
-      <!--Retour à la page d'index--->
       <div>
         <a href="index.php">Back to profile</a>
       </div>
