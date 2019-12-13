@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html>
-    <head>
-          <meta charset="utf-8" />
-          <title>Login</title>
-    </head>
-    <body>
-    	<p>
-	    	<form method="post" action="profile.php">
-	  			Username: <input type="text" name="login_username" required /><br>
-	  			Password: <input type="password" name="login_password" required /><br>
-	  			<input type="submit" value="Login" />
-			</form>
-		</p>
-		<?php
+<?php $title = 'Login'; ?>
+
+<?php ob_start(); ?>
+
+	<p>
+	    <form method="post" action="profile.php">
+	  		Username: <input type="text" name="login_username" required /><br>
+	  		Password: <input type="password" name="login_password" required /><br>
+	  		<input type="submit" value="Login" />
+		</form>
+	</p>
+
+	<?php
 		
 			if(isset($_SESSION['login_message']))
   			{
@@ -51,5 +49,7 @@
 
 		?>
 		<p><a href="register.php">Register</a></p>
-    </body>
-</html>
+
+<?php $body_content = ob_get_clean(); ?>
+
+<?php require('./section/template.php'); ?>
