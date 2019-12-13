@@ -1,8 +1,8 @@
 <?php
 
   session_start();
-  require('db_credentials.php');
-  require('db_model.php');
+  require('model/db_credentials.php');
+  require('model/db_model.php');
 
   if(isset($_POST['delete']))
   {
@@ -31,4 +31,4 @@
     header('location:profile.php');
   }
 
-  require('section/loginView.php');
+  require('view/loginView.php');

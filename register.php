@@ -7,4 +7,4 @@
     header('location:profile.php');
   }
 
-  require('section/registerView.php');
+  require('view/registerView.php');

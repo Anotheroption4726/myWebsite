@@ -62,4 +62,4 @@
 
 <?php $body_content = ob_get_clean(); ?>
 
-<?php require('./section/template.php'); ?>
+<?php require('./view/template.php'); ?>

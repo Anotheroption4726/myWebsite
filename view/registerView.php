@@ -9,8 +9,9 @@
       <input type="submit" value="Register" />
     </form>
   </p>
+  
   <p><a href="login.php">Login</a></p>  
 
 <?php $body_content = ob_get_clean(); ?>
 
-<?php require('./section/template.php'); ?>
+<?php require('view/template.php'); ?>
