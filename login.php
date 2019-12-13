@@ -1,12 +1,11 @@
 <?php
 
   session_start();
-  require('model/db_credentials.php');
   require('model/db_model.php');
 
   if(isset($_POST['delete']))
   {
-    deleteUser();
+    deleteUser($_SESSION['session_id']);
   }
 
   if (isset($_POST['logout']))
@@ -18,7 +17,7 @@
   {
     if($_POST['register_username'] != NULL || $_POST['register_password'] != NULL)
     {
-      registerUser();
+      registerUser($_POST['register_username'], $_POST['register_password']);
     }
     else
     {

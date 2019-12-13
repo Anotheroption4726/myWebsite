@@ -1,11 +1,25 @@
 <?php
 
-  function deleteUser()
+  //  __Connection à la base de données__
+  //  Adresse: localhost
+  //  Nom: myWebsite
+  //  Login: root
+  //  Password:
+
+  const C_HOST = 'localhost';
+  const C_DBNAME = 'myWebsite';
+  const C_LOGIN = 'root';
+  const C_PASSWORD = '';
+
+
+  
+
+  function deleteUser($deleteUserId)
   {
-  	require('db_connect.php');
+  	$bdd = dbconnect();
 
   	$req = $bdd->prepare('DELETE FROM users_table WHERE id = :delete_id');
-    $req->execute(array('delete_id' => $_SESSION['session_id']));
+    $req->execute(array('delete_id' => $deleteUserId));
     $req->closeCursor();
 
     unset($_SESSION);
@@ -17,7 +31,7 @@
 
   function logoutUser()
   {
-  	require('db_connect.php');
+  	$bdd = dbconnect();
 
   	unset($_SESSION);
     session_destroy();
@@ -26,12 +40,12 @@
   }
 
 
-  function registerUser()
+  function registerUser($newUsername, $newUserPassword)
   {
-  	require('db_connect.php');
+  	$bdd = dbconnect();
 
   	$req = $bdd->prepare('SELECT username FROM users_table WHERE username = :input_username');
-    $req->execute(array('input_username' => $_POST['register_username']));
+    $req->execute(array('input_username' => $newUsername));
     $data = $req->fetch();
     $req->closeCursor();
 
@@ -39,8 +53,8 @@
     {
       $req = $bdd->prepare('INSERT INTO users_table(username, password) VALUES(:input_username, :input_password)');
       $req->execute(array(
-        'input_username' => htmlspecialchars($_POST['register_username']),
-        'input_password' => htmlspecialchars($_POST['register_password'])
+        'input_username' => htmlspecialchars($newUsername),
+        'input_password' => htmlspecialchars($newUserPassword)
       ));
 
       $_SESSION['login_message'] = "successful_register";
@@ -52,12 +66,12 @@
   }
 
 
-  function loginUser()
+  function loginUser($loginUsername, $loginUserPassword)
   {
-  	require('db_connect.php');
+  	$bdd = dbconnect();
 
     $req = $bdd->prepare('SELECT id FROM users_table WHERE username = :input_username AND password = :input_password');
-    $req->execute(array('input_username' => $_POST['login_username'], 'input_password' => $_POST['login_password']));
+    $req->execute(array('input_username' => $loginUsername, 'input_password' => $loginUserPassword));
     $data = $req->fetch();
     $req->closeCursor();
 
@@ -72,12 +86,12 @@
   }
 
 
-  function getUserName()
+  function getUserName($getUserId)
   {
-    require('db_connect.php');
+    $bdd = dbconnect();
 
     $req = $bdd->prepare('SELECT username FROM users_table WHERE id = :session_id');
-    $req->execute(array('session_id' => $_SESSION['session_id']));
+    $req->execute(array('session_id' => $getUserId));
     $data = $req->fetch();
     $req->closeCursor();
 
@@ -85,15 +99,15 @@
   }
 
 
-  function postMessage()
+  function postMessage($messageSenderId, $messageContent)
   {
-  	require('db_connect.php');
+  	$bdd = dbconnect();
 
   	$req = $bdd->prepare('INSERT INTO messages_table(sender_id, message, posting_date_time) VALUES(:message_sender, :message_content, NOW())');
 
   	$req->execute(array(
-  	    'message_sender' => $_SESSION['session_id'],
-  	    'message_content' => htmlspecialchars($_POST['message_input'])
+  	    'message_sender' => $messageSenderId,
+  	    'message_content' => htmlspecialchars($messageContent)
   	   	));
 
   	$req->closeCursor();
@@ -102,12 +116,26 @@
 
   function getMessages()
   {
-  	require('db_connect.php');
+    $bdd = dbconnect();
 
   	$req = $bdd->query('SELECT sender_id, message, DATE(posting_date_time) AS posting_day, HOUR(posting_date_time) AS posting_hour, MINUTE(posting_date_time) AS posting_minute FROM messages_table ORDER BY ID');
 
   	return $req;
   }
-  
+
+
+  function dbconnect()
+  {
+    try
+    {
+      $bdd = new PDO('mysql: host='.C_HOST.'; dbname='.C_DBNAME.'; charset=utf8', C_LOGIN, C_PASSWORD, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    }
+    catch (Exception $e)
+    {
+      die('Erreur : ' . $e->getMessage());
+    }
+
+    return $bdd;
+  }
 
 ?>

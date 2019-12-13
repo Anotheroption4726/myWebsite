@@ -1,7 +1,6 @@
 <?php
 
   session_start();
-  require('model/db_credentials.php');
   require('model/db_model.php');
 
   if(!isset($_SESSION['session_id']))
@@ -11,7 +10,7 @@
 
   if(isset($_POST['message_input']))
   {
-    postMessage();
+    postMessage($_SESSION['session_id'], $_POST['message_input']);
   }
 
   $req = getMessages();

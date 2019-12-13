@@ -1,14 +1,13 @@
 <?php
 
   session_start();
-  require('./model/db_credentials.php');
-  require('./model/db_model.php');
+  require('model/db_model.php');
 
   if (isset($_POST['login_username']) && isset($_POST['login_password']))
   {
     if($_POST['login_username'] != NULL || $_POST['login_password'] != NULL)
     {
-      loginUser();
+      loginUser($_POST['login_username'], $_POST['login_password']);
     }
     else
     {
@@ -21,6 +20,6 @@
     header('location:login.php');
   }
 
-  $loggedUserName = getUserName();
+  $loggedUserName = getUserName($_SESSION['session_id']);
 
   require('view/profileView.php');
