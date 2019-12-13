@@ -10,7 +10,7 @@
                 <?php
                   while ($data = $req->fetch())
                   {
-                    if ($data['sender_id'] == $_SESSION['session_id'])
+                    if ($data['sender_id'] == $loggedUserId)
                     {
                 ?>
 

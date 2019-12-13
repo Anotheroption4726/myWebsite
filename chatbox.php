@@ -13,6 +13,9 @@
     postMessage($_SESSION['session_id'], $_POST['message_input']);
   }
 
+
+  $loggedUserId = $_SESSION['session_id'];
+
   $req = getMessages();
 
   require('view/chatboxView.php');
