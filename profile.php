@@ -2,7 +2,7 @@
 
   session_start();
   require('db_credentials.php');
-  require('db_modele.php');
+  require('db_model.php');
 
   if (isset($_POST['login_username']) && isset($_POST['login_password']))
   {
@@ -16,11 +16,11 @@
     }
   }
 
-  if (!isset($_SESSION['session_username']))
+  if (!isset($_SESSION['session_id']))
   {
     header('location:login.php');
   }
 
-  require('./section/section_profile.php');
+  $loggedUserName = getUserName();
 
-?>
+  require('./section/profileView.php');

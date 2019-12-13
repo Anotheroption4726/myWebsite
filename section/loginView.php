@@ -5,7 +5,6 @@
           <title>Login</title>
     </head>
     <body>
-
     	<p>
 	    	<form method="post" action="profile.php">
 	  			Username: <input type="text" name="login_username" required /><br>
@@ -13,7 +12,6 @@
 	  			<input type="submit" value="Login" />
 			</form>
 		</p>
-
 		<?php
 		
 			if(isset($_SESSION['login_message']))
@@ -52,8 +50,6 @@
   			}
 
 		?>
-
 		<p><a href="register.php">Register</a></p>
-
     </body>
 </html>

@@ -2,9 +2,9 @@
 
   session_start();
   require('db_credentials.php');
-  require('db_modele.php');
+  require('db_model.php');
 
-  if(!isset($_SESSION['session_username']))
+  if(!isset($_SESSION['session_id']))
   {
     header('location:login.php');
   }
@@ -16,8 +16,6 @@
 
   $req = getMessages();
 
-  require('./section/section_chatbox.php');
+  require('./section/chatboxView.php');
 
   $req->closeCursor();
-
-?>

@@ -18,14 +18,14 @@
           <div class="col-12 msg_history_display">
               <div class="msg_history">
                 <?php
-                  while ($donnees = $req->fetch())
+                  while ($data = $req->fetch())
                   {
-                    if ($donnees['sender'] == $_SESSION['session_username'])
+                    if ($data['sender_id'] == $_SESSION['session_id'])
                     {
                       echo '<div class="outgoing_msg">
                              <div class="sent_msg">
-                               <p style="overflow-wrap: break-word;">'.$donnees['message'].'</p>
-                               <span class="time_date">'.$donnees['posting_hour'].':'.$donnees['posting_minute'].' | '.$donnees['posting_day'].'</span>
+                               <p style="overflow-wrap: break-word;">'.htmlspecialchars($data['message']).'</p>
+                               <span class="time_date">'.htmlspecialchars($data['posting_hour']).':'.htmlspecialchars($data['posting_minute']).' | '.htmlspecialchars($data['posting_day']).'</span>
                               </div>
                              </div>';
                     }
@@ -34,8 +34,8 @@
                       echo '<div class="incoming_msg">
                               <div class="received_msg">
                                 <div class="received_withd_msg">
-                                  <p style="overflow-wrap: break-word;">'.$donnees['message'].'</p>
-                                  <span class="time_date">'.$donnees['posting_hour'].':'.$donnees['posting_minute'].' | '.$donnees['posting_day'].'</span>
+                                  <p style="overflow-wrap: break-word;">'.htmlspecialchars($data['message']).'</p>
+                                  <span class="time_date">'.htmlspecialchars($data['posting_hour']).':'.htmlspecialchars($data['posting_minute']).' | '.htmlspecialchars($data['posting_day']).'</span>
                                 </div>
                               </div>
                             </div>';

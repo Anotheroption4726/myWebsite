@@ -4,8 +4,8 @@
   {
   	require('db_connect.php');
 
-  	$req = $bdd->prepare('DELETE FROM users_table WHERE username = :delete_user');
-    $req->execute(array('delete_user' => $_SESSION['session_username']));
+  	$req = $bdd->prepare('DELETE FROM users_table WHERE id = :delete_id');
+    $req->execute(array('delete_id' => $_SESSION['session_id']));
     $req->closeCursor();
 
     unset($_SESSION);
@@ -56,14 +56,14 @@
   {
   	require('db_connect.php');
 
-  	$req = $bdd->prepare('SELECT username, password FROM users_table WHERE username = :input_username AND password = :input_password');
+    $req = $bdd->prepare('SELECT id FROM users_table WHERE username = :input_username AND password = :input_password');
     $req->execute(array('input_username' => $_POST['login_username'], 'input_password' => $_POST['login_password']));
     $data = $req->fetch();
     $req->closeCursor();
 
     if ($data != null)
     {
-      $_SESSION['session_username'] = $data['username'];
+      $_SESSION['session_id'] = $data['id'];
     }
     else
     {
@@ -72,18 +72,31 @@
   }
 
 
+  function getUserName()
+  {
+    require('db_connect.php');
+
+    $req = $bdd->prepare('SELECT username FROM users_table WHERE id = :session_id');
+    $req->execute(array('session_id' => $_SESSION['session_id']));
+    $data = $req->fetch();
+    $req->closeCursor();
+
+    return $data['username'];
+  }
+
+
   function postMessage()
   {
   	require('db_connect.php');
 
-	$req = $bdd->prepare('INSERT INTO messages_table(sender, message, posting_date_time) VALUES(:message_sender, :message_content, NOW())');
+  	$req = $bdd->prepare('INSERT INTO messages_table(sender_id, message, posting_date_time) VALUES(:message_sender, :message_content, NOW())');
 
-	$req->execute(array(
-	    'message_sender' => $_SESSION['session_username'],
-	    'message_content' => htmlspecialchars($_POST['message_input'])
-	   	));
+  	$req->execute(array(
+  	    'message_sender' => $_SESSION['session_id'],
+  	    'message_content' => htmlspecialchars($_POST['message_input'])
+  	   	));
 
-	$req->closeCursor();
+  	$req->closeCursor();
   }
 
 
@@ -91,7 +104,7 @@
   {
   	require('db_connect.php');
 
-  	$req = $bdd->query('SELECT sender, message, DATE(posting_date_time) AS posting_day, HOUR(posting_date_time) AS posting_hour, MINUTE(posting_date_time) AS posting_minute FROM messages_table ORDER BY ID');
+  	$req = $bdd->query('SELECT sender_id, message, DATE(posting_date_time) AS posting_day, HOUR(posting_date_time) AS posting_hour, MINUTE(posting_date_time) AS posting_minute FROM messages_table ORDER BY ID');
 
   	return $req;
   }

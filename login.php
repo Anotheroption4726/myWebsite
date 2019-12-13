@@ -2,7 +2,7 @@
 
   session_start();
   require('db_credentials.php');
-  require('db_modele.php');
+  require('db_model.php');
 
   if(isset($_POST['delete']))
   {
@@ -26,11 +26,9 @@
     }
   }
 
-  if (isset($_SESSION['session_username']))
+  if (isset($_SESSION['session_id']))
   {
     header('location:profile.php');
   }
 
-  require('section/section_login.php');
-
-?>
+  require('section/loginView.php');
